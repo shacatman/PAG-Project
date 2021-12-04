@@ -10,11 +10,17 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "KinematicBody2D",
+"class": "Player",
+"language": "GDScript",
+"path": "res://Player/Player.gd"
+}, {
+"base": "KinematicBody2D",
 "class": "Pushable",
 "language": "GDScript",
 "path": "res://Pushables/Pushable.gd"
 } ]
 _global_script_class_icons={
+"Player": "",
 "Pushable": ""
 }
 

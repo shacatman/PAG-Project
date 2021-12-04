@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Player/Player.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Shaders/ShaderCircle.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Shaders/ColorEffect.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Pushables/PushableBox.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Collectibles/Crystal.tscn" type="PackedScene" id=4]
 
 [node name="World" type="Node2D"]
 
@@ -140,13 +141,31 @@ __meta__ = {
 [node name="PushableBox" parent="." instance=ExtResource( 3 )]
 position = Vector2( 87, 82 )
 
-[node name="CircleShader" parent="." instance=ExtResource( 2 )]
+[node name="ColorEffect" parent="." instance=ExtResource( 2 )]
 position = Vector2( 264, 143 )
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
 position = Vector2( 264, 143 )
 
 [node name="RemoteTransform2D" type="RemoteTransform2D" parent="Player"]
-remote_path = NodePath("../../CircleShader")
+remote_path = NodePath("../../ColorEffect")
 
-[editable path="CircleShader"]
+[node name="TestCrystals" type="Node2D" parent="."]
+
+[node name="Crystal" parent="TestCrystals" instance=ExtResource( 4 )]
+position = Vector2( 211, 39 )
+
+[node name="Crystal2" parent="TestCrystals" instance=ExtResource( 4 )]
+position = Vector2( 76, 165 )
+color = 0
+
+[node name="Crystal3" parent="TestCrystals" instance=ExtResource( 4 )]
+position = Vector2( 34, 30 )
+color = 2
+
+[connection signal="newcolor" from="TestCrystals/Crystal" to="ColorEffect" method="_on_Crystal_newcolor"]
+[connection signal="newcolor" from="TestCrystals/Crystal2" to="ColorEffect" method="_on_Crystal_newcolor"]
+[connection signal="newcolor" from="TestCrystals/Crystal3" to="ColorEffect" method="_on_Crystal_newcolor"]
+
+[editable path="ColorEffect"]
+[editable path="TestCrystals/Crystal2"]

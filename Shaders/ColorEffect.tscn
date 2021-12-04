@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Shaders/ShaderCircle.gdshader" type="Shader" id=1]
+[ext_resource path="res://Shaders/ColorEffect.gd" type="Script" id=2]
 
 [sub_resource type="ShaderMaterial" id=62]
 shader = ExtResource( 1 )
@@ -13,7 +14,8 @@ shader_param/size = 0.17
 
 [sub_resource type="CircleShape2D" id=61]
 
-[node name="Area2D" type="Area2D"]
+[node name="ColorEffect" type="Area2D"]
+script = ExtResource( 2 )
 
 [node name="ColorRect" type="ColorRect" parent="."]
 material = SubResource( 62 )

@@ -1,5 +1,5 @@
 extends KinematicBody2D
-
+class_name Player
 
 #variables
 onready var MAX_SPEED=100
@@ -7,10 +7,6 @@ onready var ACCELERATION=600
 onready var FRICTION=600
 #onready var pushables={}
 var velocity=Vector2.ZERO
-
-## Called when the node enters the scene tree for the first time.
-#func _ready():
-#	pass # Replace with function body.
 
 
 # Called every physics frame. 'delta' is the elapsed time since the previous frame.

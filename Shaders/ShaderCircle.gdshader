@@ -2,11 +2,14 @@ shader_type canvas_item;
 
 uniform bool active=true;
 uniform bool show_red=false;
-uniform bool show_green=true;
-uniform bool show_blue=true;
+uniform bool show_green=false;
+uniform bool show_blue=false;
 uniform vec2 center;
 uniform float size;//0.17 seems like a good choice
 void fragment(){
+//	if(!active){
+//		return;
+//	}
 	vec2 scaleduv=UV-0.5;
 	float mask =1.0-smoothstep(size-0.1,size,length(scaleduv-center));
 	COLOR=texture(SCREEN_TEXTURE,SCREEN_UV);
