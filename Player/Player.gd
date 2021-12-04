@@ -5,11 +5,12 @@ extends KinematicBody2D
 onready var MAX_SPEED=100
 onready var ACCELERATION=600
 onready var FRICTION=600
+#onready var pushables={}
 var velocity=Vector2.ZERO
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
+## Called when the node enters the scene tree for the first time.
+#func _ready():
+#	pass # Replace with function body.
 
 
 # Called every physics frame. 'delta' is the elapsed time since the previous frame.
@@ -25,4 +26,28 @@ func _physics_process(delta):
 	else:#stop the movement
 		velocity = velocity.move_toward(Vector2.ZERO,delta*FRICTION)
 	move_and_slide(velocity)
+	if get_slide_count()>0:
+		var pushable = get_slide_collision(0).collider as Pushable
+		if pushable:
+			pushable.push(-get_slide_collision(0).normal)#input_vector)
 
+#	for pushable in pushables:
+#		pushable.push(pushables[pushable])
+
+#
+#func _on_BoxInteraction_body_entered(box):
+##	print("entered!!!")
+#	var direction= box.global_position -global_position
+#		#move only on one (significant) axis
+#	if abs(direction.x)>abs(direction.y):
+#		direction.y=0
+#	elif abs(direction.x)<abs(direction.y):
+#		direction.x=0
+#	pushables[box]=direction.normalized()
+##	box.push(direction.normalized())
+#	pass # Replace with function body.
+#
+#
+#func _on_BoxInteraction_body_exited(box):
+#	pushables.erase(box)
+#	pass # Replace with function body.

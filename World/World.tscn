@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Player/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Shaders/ShaderCircle.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Pushables/PushableBox.tscn" type="PackedScene" id=3]
 
 [node name="World" type="Node2D"]
 
@@ -135,6 +136,9 @@ color = Color( 0.913725, 0.121569, 0.121569, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="PushableBox" parent="." instance=ExtResource( 3 )]
+position = Vector2( 87, 82 )
 
 [node name="CircleShader" parent="." instance=ExtResource( 2 )]
 position = Vector2( 264, 143 )

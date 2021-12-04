@@ -5,7 +5,7 @@
 [sub_resource type="ShaderMaterial" id=62]
 shader = ExtResource( 1 )
 shader_param/active = true
-shader_param/show_red = true
+shader_param/show_red = false
 shader_param/show_green = false
 shader_param/show_blue = false
 shader_param/center = null
