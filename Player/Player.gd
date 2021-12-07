@@ -21,11 +21,11 @@ func _physics_process(delta):
 		velocity = velocity.clamped(MAX_SPEED)
 	else:#stop the movement
 		velocity = velocity.move_toward(Vector2.ZERO,delta*FRICTION)
-	move_and_slide(velocity)
-	if get_slide_count()>0:
+	move_and_slide(velocity)#apply the velocity on the player
+	if get_slide_count()>0:#collision check
 		var pushable = get_slide_collision(0).collider as Pushable
 		if pushable:
-			pushable.push(-get_slide_collision(0).normal)#input_vector)
+			pushable.push(-get_slide_collision(0).normal)
 
 #	for pushable in pushables:
 #		pushable.push(pushables[pushable])

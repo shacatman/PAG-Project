@@ -1,11 +1,33 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Player/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Shaders/ColorEffect.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Pushables/PushableBox.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Collectibles/Crystal.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Shaders/CrystalEffect.gdshader" type="Shader" id=5]
+[ext_resource path="res://Shaders/CrystalEffect.tscn" type="PackedScene" id=6]
 
-[node name="World" type="Node2D"]
+[sub_resource type="ShaderMaterial" id=3]
+resource_local_to_scene = true
+shader = ExtResource( 5 )
+shader_param/active = true
+shader_param/red = 1.0
+shader_param/green = 0.0
+shader_param/blue = 0.0
+shader_param/center = null
+shader_param/size = 0.3
+
+[sub_resource type="ShaderMaterial" id=1]
+resource_local_to_scene = true
+shader = ExtResource( 5 )
+shader_param/active = true
+shader_param/red = 0.0
+shader_param/green = 0.0
+shader_param/blue = 1.0
+shader_param/center = null
+shader_param/size = 0.3
+
+[node name="TestWorld" type="Node2D"]
 
 [node name="TestColors" type="Node2D" parent="."]
 
@@ -138,34 +160,80 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="PushableBox" parent="." instance=ExtResource( 3 )]
+[node name="YSort" type="YSort" parent="."]
+
+[node name="Player" parent="YSort" instance=ExtResource( 1 )]
+position = Vector2( 264, 143 )
+
+[node name="ColorEffectFollower" type="RemoteTransform2D" parent="YSort/Player"]
+remote_path = NodePath("../../../ColorEffect")
+
+[node name="PushableBox" parent="YSort" instance=ExtResource( 3 )]
 position = Vector2( 87, 82 )
+
+[node name="Crystal" parent="YSort" instance=ExtResource( 4 )]
+position = Vector2( 211, 39 )
+
+[node name="EffectFollower" type="RemoteTransform2D" parent="YSort/Crystal"]
+remote_path = NodePath("../../../CrystalEffect")
+
+[node name="Crystal2" parent="YSort" instance=ExtResource( 4 )]
+position = Vector2( 76, 165 )
+color = 0
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="YSort/Crystal2"]
+
+[node name="Crystal3" parent="YSort" instance=ExtResource( 4 )]
+position = Vector2( 34, 30 )
+color = 2
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="YSort/Crystal3"]
+remote_path = NodePath("../../../CrystalEffect3")
 
 [node name="ColorEffect" parent="." instance=ExtResource( 2 )]
 position = Vector2( 264, 143 )
 
-[node name="Player" parent="." instance=ExtResource( 1 )]
-position = Vector2( 264, 143 )
-
-[node name="RemoteTransform2D" type="RemoteTransform2D" parent="Player"]
-remote_path = NodePath("../../ColorEffect")
-
-[node name="TestCrystals" type="Node2D" parent="."]
-
-[node name="Crystal" parent="TestCrystals" instance=ExtResource( 4 )]
+[node name="CrystalEffect" parent="." instance=ExtResource( 6 )]
 position = Vector2( 211, 39 )
 
-[node name="Crystal2" parent="TestCrystals" instance=ExtResource( 4 )]
+[node name="CrystalEffect2" type="Node2D" parent="."]
 position = Vector2( 76, 165 )
-color = 0
 
-[node name="Crystal3" parent="TestCrystals" instance=ExtResource( 4 )]
+[node name="test" type="ColorRect" parent="CrystalEffect2"]
+material = SubResource( 3 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -43.0
+margin_top = -43.0
+margin_right = 43.0
+margin_bottom = 44.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CrystalEffect3" type="Node2D" parent="."]
 position = Vector2( 34, 30 )
-color = 2
 
-[connection signal="newcolor" from="TestCrystals/Crystal" to="ColorEffect" method="_on_Crystal_newcolor"]
-[connection signal="newcolor" from="TestCrystals/Crystal2" to="ColorEffect" method="_on_Crystal_newcolor"]
-[connection signal="newcolor" from="TestCrystals/Crystal3" to="ColorEffect" method="_on_Crystal_newcolor"]
+[node name="test" type="ColorRect" parent="CrystalEffect3"]
+material = SubResource( 1 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -43.0
+margin_top = -43.0
+margin_right = 43.0
+margin_bottom = 44.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
+[connection signal="newcolor" from="YSort/Crystal" to="ColorEffect" method="_on_Crystal_newcolor"]
+[connection signal="newcolor" from="YSort/Crystal" to="CrystalEffect" method="_on_Crystal_newcolor"]
+[connection signal="newcolor" from="YSort/Crystal2" to="ColorEffect" method="_on_Crystal_newcolor"]
+[connection signal="newcolor" from="YSort/Crystal3" to="ColorEffect" method="_on_Crystal_newcolor"]
+
+[editable path="YSort/Crystal2"]
 [editable path="ColorEffect"]
-[editable path="TestCrystals/Crystal2"]

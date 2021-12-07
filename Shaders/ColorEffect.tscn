@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Shaders/ShaderCircle.gdshader" type="Shader" id=1]
 [ext_resource path="res://Shaders/ColorEffect.gd" type="Script" id=2]
@@ -12,9 +12,7 @@ shader_param/show_blue = false
 shader_param/center = null
 shader_param/size = 0.17
 
-[sub_resource type="CircleShape2D" id=61]
-
-[node name="ColorEffect" type="Area2D"]
+[node name="ColorEffect" type="Node2D"]
 script = ExtResource( 2 )
 
 [node name="ColorRect" type="ColorRect" parent="."]
@@ -30,8 +28,3 @@ margin_bottom = 320.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
-shape = SubResource( 61 )
-disabled = true

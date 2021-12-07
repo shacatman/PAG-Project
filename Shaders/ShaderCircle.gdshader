@@ -13,7 +13,8 @@ void fragment(){
 	vec2 scaleduv=UV-0.5;
 	float mask =1.0-smoothstep(size-0.1,size,length(scaleduv-center));
 	COLOR=texture(SCREEN_TEXTURE,SCREEN_UV);
-	vec3 grayscale=vec3(COLOR.r+COLOR.g+COLOR.b)/3.0;
+//	vec3 grayscale=vec3(COLOR.r+COLOR.g+COLOR.b)/3.0;
+	vec3 grayscale=vec3(COLOR.r*0.2126+COLOR.g*0.7152+COLOR.b*0.0722);//better difference between the colors
 	bool setcolor=false;
 	if(mask>0.85){
 		//determine the hue value of the pixel
@@ -51,6 +52,6 @@ void fragment(){
 			setcolor=true;
 		}
 	}
-	if(!setcolor)
+	if(!setcolor)//default option-apply grayscale
 		COLOR.rgb=vec3(grayscale);
 }
