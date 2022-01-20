@@ -1,6 +1,6 @@
 extends Node2D
 
-#Defines the main color effect behaviour: updating the visible colors
+#Defines the main color effect behavior: updating the visible colors
 #member variables
 onready var colorRect : ColorRect = $ColorRect
 enum{RED, GREEN, BLUE}#must be the same as in the Crystal COLORS

@@ -1,7 +1,7 @@
 extends Node2D
 
 #Defines Level setup
-onready var ground : TileMap = $TileMap
+onready var ground : TileMap = $GrassTile
 onready var pathFinding : Node2D = $PathFinding
 onready var companion = $YSort/Companion
 

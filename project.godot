@@ -17,7 +17,7 @@ _global_script_classes=[ {
 "base": "KinematicBody2D",
 "class": "Pushable",
 "language": "GDScript",
-"path": "res://Pushables/Pushable.gd"
+"path": "res://Objects/Pushable.gd"
 } ]
 _global_script_class_icons={
 "Player": "",

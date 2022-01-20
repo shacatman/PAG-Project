@@ -8,8 +8,8 @@ var velocity : = Vector2.ZERO
 onready var MAX_SPEED : = 100
 onready var ACCELERATION : = 600
 onready var FRICTION : = 600
-onready var collisionShape:CollisionShape2D=$CollisionShape2D
-
+onready var collisionShape:CollisionShape2D = $CollisionShape2D
+onready var sprite : = $Sprite
 
 # Called every physics frame. Deals with physics logic.
 func _physics_process(delta):
@@ -22,6 +22,17 @@ func _physics_process(delta):
 	if input_vector != Vector2.ZERO:
 		velocity += input_vector * ACCELERATION * delta#v=v0+a*t
 		velocity = velocity.clamped(MAX_SPEED)
+		#sprite frame:	
+		if abs(velocity.y) >abs(velocity.x):
+			if velocity.y > 0:#going down
+				sprite.set_frame(0)
+			elif velocity.y < 0:
+				sprite.set_frame(2)
+		else:
+			if velocity.x > 0:#going right
+				sprite.set_frame(1)
+			elif velocity.x < 0:
+				sprite.set_frame(3)
 	else:#stop the movement
 		velocity = velocity.move_toward(Vector2.ZERO, delta * FRICTION)
 	move_and_slide(velocity)#apply the velocity on the player
