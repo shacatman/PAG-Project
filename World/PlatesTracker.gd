@@ -17,9 +17,10 @@ func _ready():
 
 func platePressed():#called by Plate objects whenever plate is pressed
 	platesPressed += 1
-	if platesPressed == platesGoal:
+	if platesPressed == platesGoal and barrier!=null:
 		barrier.queue_free()
-#		emit_signal("levelCompleted")
+		barrier=null
+
 
 func plateUnPressed():#called by Plate objects whenever plate is unpressed
 	platesPressed-=1

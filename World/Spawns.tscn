@@ -1,0 +1,11 @@
+[gd_scene format=2]
+
+[node name="Spawns" type="Node2D"]
+
+[node name="North" type="Position2D" parent="."]
+
+[node name="East" type="Position2D" parent="."]
+
+[node name="South" type="Position2D" parent="."]
+
+[node name="West" type="Position2D" parent="."]
