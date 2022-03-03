@@ -72,6 +72,7 @@ shader_param/size = 5.0
 script = ExtResource( 10 )
 
 [node name="GrassTile" type="TileMap" parent="."]
+z_index = -1
 tile_set = SubResource( 7 )
 cell_size = Vector2( 32, 32 )
 format = 1
@@ -163,4 +164,5 @@ visible = false
 [connection signal="newcolor" from="YSort/Crystal" to="ColorEffect" method="_on_Crystal_newcolor"]
 [connection signal="newcolor" from="YSort/Crystal" to="CrystalEffect" method="_on_Crystal_newcolor"]
 
+[editable path="YSort/Companion"]
 [editable path="Spawns"]

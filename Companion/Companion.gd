@@ -1,6 +1,7 @@
 extends KinematicBody2D
 
 #Defines the Companion object: AI,State Machine and steering behavior
+
 var velocity : = Vector2.ZERO
 var state = IDLE
 var target = null
@@ -8,14 +9,20 @@ var pathFinding
 var path : Array = []
 var stay : bool = false
 var speed : = 40
+var wanderTimer = null#spacing between idle and wander
+
+onready var cooldownTimer : Timer = $Timer#cooldown to avoid wandering after commands
 onready var player : Player = $"../Player"#reference to player scene
 onready var lineOfSight : RayCast2D = $LineOfSight
 onready var collisionShape : CollisionShape2D = $CollisionShape2D
 onready var sprite : = $Sprite
+onready var prevPos : Vector2 = global_position
 
 enum {#state machine
 	IDLE,
-	FOLLOW
+	FOLLOWPLAYER
+	FOLLOWTARGET
+	WANDER
 }
 
 
@@ -26,36 +33,82 @@ func _ready():
 
 # Called every physics frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
-	if Input.is_action_just_pressed("ui_select"):#temporary solution? use F key for 'Freeze'?
-		stay = !stay
-		
-	if !stay:#allowed to move
-		state = FOLLOW
-	else:
-		state = IDLE
-		
+	prevPos = global_position#keep track of current position
+
 	match state:
 		IDLE:
 			velocity = Vector2.ZERO
-		FOLLOW:
-			if isPlayerInSight():
+			#option to change to wander state:
+			if !stay and wanderTimer == null and cooldownTimer.is_stopped():#can move and not waiting to move
+				wanderTimer = get_tree().create_timer(rand_range(4, 10))#wait until movement(random time duration)
+				yield(wanderTimer, "timeout")#continue once timer finished
+				if state == IDLE and !stay and cooldownTimer.is_stopped():#now is time to move(and still can)
+					state = WANDER
+					target = null#new target will be picked in wander state
+				wanderTimer = null#"reset" timer for next time
+		
+		WANDER:	
+			var space = get_world_2d().get_direct_space_state()
+			while !target:#pick random point nearby
+				var x = rand_range(global_position.x - 40, global_position.x + 40)
+				var y = rand_range(global_position.y - 40, global_position.y + 40)
+				target = Vector2(x, y)
+				#if no clear (and visible) path try again with another point
+				if space.intersect_point(target, 1, [], collision_mask) or pathFinding.getNewPath(global_position, target).size()<1:
+					target = null
+			#once picked target-move towards it
+			followTarget(delta, target)
+			if global_position.distance_to(prevPos) < 0.2:#didn't move much-stop trying
+#				velocity = Vector2.ZERO
+				state = IDLE
+		
+		FOLLOWPLAYER, FOLLOWTARGET:
+			if state == FOLLOWPLAYER and isPlayerInSight():#set relevant target if following player
 				target = player.global_position
-				
-			if target and global_position.distance_to(target) > 16:
+			
+			#do not follow targets if within close proximity
+			if target and global_position.distance_to(target) > 23 and state == FOLLOWPLAYER:
 				followTarget(delta, target)
-			#sprite frame:	
-			if abs(velocity.y) >abs(velocity.x):
-				if velocity.y > 0:#going down
-					sprite.set_frame(0)
-				elif velocity.y < 0:
-					sprite.set_frame(2)
+			elif target and global_position.distance_to(target) > 10 and state == FOLLOWTARGET:
+				followTarget(delta, target)
 			else:
-				if velocity.x > 0:#going right
-					sprite.set_frame(1)
-				elif velocity.x < 0:
-					sprite.set_frame(3)
+				target = null
+				
+			if state == FOLLOWTARGET and global_position.distance_to(prevPos) < 0.1:#didn't move much-stop trying (probably partially blocked path)
+				state = IDLE
+				
+	#drawing sprite frame:	
+	if abs(velocity.y) > abs(velocity.x):
+		if velocity.y > 0:#going down
+			sprite.set_frame(0)
+		elif velocity.y < 0:
+			sprite.set_frame(2)
+	else:
+		if velocity.x > 0:#going right
+			sprite.set_frame(1)
+		elif velocity.x < 0:
+			sprite.set_frame(3)
 
 
+
+func _on_Commands_newCommand(id, params = null):#recieved new command via signal
+	match id:
+		0:#FOLLOWPLAYER toggle
+			if state != FOLLOWPLAYER:
+				state = FOLLOWPLAYER
+			stay = false
+			
+		1:#STAY
+			state = IDLE
+			stay = true
+			
+		2:#Go To
+			cooldownTimer.start()#start/restart cooldown until companion can start wandering again
+			state = FOLLOWTARGET
+			#params is the target position
+			target = params
+			stay = false
+			
 
 func followTarget(delta, target) -> void:
 	var avoiding : bool = false
@@ -63,18 +116,14 @@ func followTarget(delta, target) -> void:
 	if path.size() >= 1:
 		#path steering
 		var desired_velocity : Vector2
-		if path.size()!=1:
+		if path.size() != 1:
 			desired_velocity = global_position.direction_to(path[1]) * speed 
-		else:#target is on the same tile
-			desired_velocity = global_position.direction_to(path[0]) * speed 
+		else:#target is on the same tile-aim for exact target
+			desired_velocity = global_position.direction_to(target) * speed 
 			
-		if path.size()==1 or global_position.distance_to(target) < 30:#near target
-			#slow near target:		
-			desired_velocity*= global_position.distance_to(player.global_position)/40
-			if velocity.x*desired_velocity.x<0 or velocity.y*desired_velocity.y<0:#don't switch directions,just stop
-				state = IDLE
-				return
-		elif path.size() > 2 and global_position.distance_to(path[1]) < 20:#skip close path points-smoother traversal
+		if path.size() <= 2:#slow near target(2 tile distance at most)		
+			desired_velocity *= (global_position.distance_to(target) / 60) * 0.9 + 0.2
+		elif path.size() > 2 and global_position.distance_to(path[1]) < 20:#skip close path points-for smoother traversal
 			desired_velocity = global_position.direction_to(path[2]) * speed
 		var steering : Vector2 = desired_velocity - velocity
 		steering = steering.clamped(15)#max steering force
@@ -88,51 +137,54 @@ func followTarget(delta, target) -> void:
 			var angleOffset : Vector2 = velocity.rotated(deg2rad(30 * i)).normalized()
 			var result = space_state.intersect_ray(global_position, global_position + angleOffset * 16, [self], collision_mask)
 			if i != 0:#ignore axis parallel to velocity
-				angleOffset= angleOffset.dot(offset) * offset
+				angleOffset = angleOffset.dot(offset) * offset
 			if result:
 				avoiding = true
-				steering -= angleOffset * 20#*(1/(abs(i)+1)#proportion to distance from object?
+				steering -= angleOffset * 5
 				if i == 0:
 					var pushForce : Vector2 = (global_position - result.collider.global_position).normalized()
 					pushForce = pushForce.dot(offset) * offset
-					steering += pushForce.normalized() * 40#dont use normalized here?maybe doesnt matter?
+					steering += pushForce.normalized() * 10
 			else:
-				steering += angleOffset * 40#*(1/(abs(i)+1)
+				steering += angleOffset * 10
 
-		if !avoiding:
+		if !avoiding:#no collisions detected
 			steering = Vector2.ZERO
-		elif 1 - abs(steering.normalized().dot(velocity.normalized())) < 0.0001:#need to break symetry
+		elif 1 - abs(steering.normalized().dot(velocity.normalized())) < 0.0001:#need to break symetry if steering is parallel- try with parallel rays from edges
 			avoiding = false#reset boolean
 			var positionOffset : Vector2 = velocity.rotated(deg2rad(90)).normalized() * collisionShape.shape.radius
 			for i in range(-1, 2):
-				var result = space_state.intersect_ray(global_position+i*positionOffset, global_position+i*positionOffset+velocity.normalized()*30, [self], collision_mask)
+				var result = space_state.intersect_ray(global_position + i * positionOffset, global_position + i * positionOffset + velocity.normalized() * 30, [self], collision_mask)
 				if result:
 					avoiding = true
-#					steering-= (i*positionOffset+velocity.normalized()*30).normalized()*250
-					var pushForce : Vector2 = (global_position+i*positionOffset -result.collider.global_position).normalized()
-					pushForce = pushForce.dot(positionOffset.normalized())*positionOffset.normalized()
-					steering += pushForce.normalized() * 20#dont use normalized here?maybe doesnt matter?
+					var pushForce : Vector2 = (global_position + i * positionOffset - result.collider.global_position).normalized()
+					pushForce = pushForce.dot(positionOffset.normalized()) * positionOffset.normalized()
+					steering += pushForce.normalized() * 5
 				else:
-					steering += (i * positionOffset + velocity.normalized() * 30).normalized() * 40
-			if !avoiding:
+					steering += (i * positionOffset + velocity.normalized() * 30).normalized() * 10
+			
+			if !avoiding:#no collisions detected
 				steering = Vector2.ZERO
-			elif 1 - abs(steering.normalized().dot(velocity.normalized())) < 0.0001:
-				print("CHOSE RANDOM STEERING DIRECTION!!!!!")#for debug,possible not needed
+			elif 1 - abs(steering.normalized().dot(velocity.normalized())) < 0.0001:#steering stil parallel to velocity- just pick random direction
+				print("CHOSE RANDOM STEERING DIRECTION!!!!!")#for debug
 				#choose direction randomly
 				if randi() % 2 == 0:
-					steering += positionOffset.normalized() * 40
+					steering += positionOffset.normalized() * 10
 				else:
-					steering -= positionOffset.normalized() * 40
+					steering -= positionOffset.normalized() * 10
 				
-		steering = steering.clamped(40)
-		velocity = (velocity + steering).clamped(speed)
+		steering = steering.clamped(25)#max steering force
+		if global_position.distance_to(target) > 16:#don't avoid collisions if target is nearby
+			velocity = (velocity + steering).clamped(speed)
 		move_and_slide(velocity)
-	else:#no path to the player is available
-		print("CAN'T FIND PATH TO PLAYER")#for debug
+		
+	else:#no path to the target is available
+		print("CAN'T FIND PATH TO TARGET")#for debug
 		state = IDLE
-#		stay=true
 
-func isPlayerInSight() -> bool:
+
+func isPlayerInSight() -> bool:#check that there is a direct line of sight to the player
 	lineOfSight.look_at(player.global_position)
 	return lineOfSight.get_collider() is Player
+
 

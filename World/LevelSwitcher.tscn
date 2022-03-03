@@ -9,4 +9,5 @@ script = ExtResource( 1 )
 [node name="DemoLevel" parent="." instance=ExtResource( 2 )]
 
 [editable path="DemoLevel"]
+[editable path="DemoLevel/YSort/Companion"]
 [editable path="DemoLevel/Spawns"]

@@ -15,8 +15,8 @@ func setup(comingFrom = null) -> void:#called whenever a (new) level enters the 
 	companion.pathFinding = pathFinding
 	if comingFrom:#has specific spawn location
 		var spawnpos = find_node(comingFrom)#the spwan position in the new level
-		player.position = spawnpos.position
-		companion.position = spawnpos.position
+		player.global_position = spawnpos.position
+		companion.global_position = spawnpos.position
 		match comingFrom:#fix sprite orientation when entering new level
 			"North": 
 				playerSprite.set_frame(0)

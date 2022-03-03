@@ -86,8 +86,8 @@ func getNewPath(start : Vector2, end : Vector2) -> Array:
 		print("invalid points")#for debug!!!!!!
 		return []#no path
 	var tilePath = astar.get_point_path(startId, endId)
-	if tilePath.size()<1:#for debug!!!!!!
-		print("can't find path",startTile,"  ",endTile,"	",tilePath)
+#	if tilePath.size()<1:#for debug!!!!!!
+#		print("can't find path",startTile,"  ",endTile,"	",tilePath)
 	var worldPath = []
 	for point in tilePath:
 		var worldPoint = tileMap.map_to_world(point) + half_cell_size
