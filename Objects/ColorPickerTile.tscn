@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Objects/ColorPickerTile.gd" type="Script" id=1]
+[ext_resource path="res://Objects/ColoredTile.tscn" type="PackedScene" id=2]
+
+[node name="ColorPickerTile" instance=ExtResource( 2 )]
+collision_mask = 4
+script = ExtResource( 1 )
+
+[node name="ColorRect" parent="." index="0"]
+color = Color( 1, 0, 0, 1 )
+
+[node name="ReferenceRect" parent="." index="1"]
+border_color = Color( 1, 1, 1, 1 )
+
+[connection signal="body_entered" from="." to="." method="_on_ColorPickerTile_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_ColorPickerTile_body_exited"]

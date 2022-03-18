@@ -17,11 +17,11 @@ func _ready():
 
 func platePressed():#called by Plate objects whenever plate is pressed
 	platesPressed += 1
-	if platesPressed == platesGoal and barrier!=null:
+	if platesPressed == platesGoal and barrier != null:
 		barrier.queue_free()
-		barrier=null
+		barrier = null
 
 
 func plateUnPressed():#called by Plate objects whenever plate is unpressed
-	platesPressed-=1
+	platesPressed -= 1
 

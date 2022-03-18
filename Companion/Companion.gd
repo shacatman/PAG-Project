@@ -166,7 +166,7 @@ func followTarget(delta, target) -> void:
 			if !avoiding:#no collisions detected
 				steering = Vector2.ZERO
 			elif 1 - abs(steering.normalized().dot(velocity.normalized())) < 0.0001:#steering stil parallel to velocity- just pick random direction
-				print("CHOSE RANDOM STEERING DIRECTION!!!!!")#for debug
+#				print("CHOSE RANDOM STEERING DIRECTION!!!!!")#for debug
 				#choose direction randomly
 				if randi() % 2 == 0:
 					steering += positionOffset.normalized() * 10
