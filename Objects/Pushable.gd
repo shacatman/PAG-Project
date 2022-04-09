@@ -11,3 +11,9 @@ var SPEED : = 50
 func push(direction : Vector2) -> void:
 	move_and_slide(direction.normalized() * SPEED)
 
+func getSaveData():
+	return {"posx":position.x, "posy":position.y}
+	
+func loadData(data : Dictionary):
+	position.x = data["posx"]
+	position.y = data["posy"]

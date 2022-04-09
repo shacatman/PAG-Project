@@ -12,7 +12,7 @@ shader_param/show_blue = false
 shader_param/center = null
 shader_param/size = 0.17
 
-[node name="ColorEffect" type="Node2D"]
+[node name="ColorEffect" type="Node2D" groups=["Persistent_Static"]]
 script = ExtResource( 2 )
 
 [node name="ColorRect" type="ColorRect" parent="."]

@@ -15,6 +15,6 @@ func _on_NpcCatcher_body_entered(body):
 		var posy = global_position.y + rand_range(-size.y/2, size.y/2) * scale.y
 		body.sleepPos = Vector2(posx, posy)
 		npcGoal -= 1
-		if npcGoal == 0:#full capacity
-			barrier.queue_free()
-			barrier = null
+		if npcGoal == 0 and barrier.active:#full capacity
+			barrier.disableBarrier()
+

@@ -4,14 +4,20 @@ extends Node2D
 #member variables
 onready var colorRect : ColorRect = $ColorRect
 enum{RED, GREEN, BLUE}#must be the same as in the Crystal COLORS
+var colorMap:Dictionary = {RED:"red", GREEN:"green", BLUE:"blue"}
+var colorKeys:Array = []
+
+func _on_Crystal_newcolor(color : int) -> void:#connected through new_color signal(emitted by crystal)
+	colorRect.material.set_shader_param("show_"+colorMap[color], true)
 
 
+func getSaveData():#Persistent_Static
+	for colorKey in colorMap:#save shader parameters
+		if colorRect.material.get_shader_param("show_" + colorMap[colorKey]):
+			colorKeys.append(colorKey)
+	return {"colorKeys": colorKeys}
+	
+func loadData(data:Dictionary):#Persistent_Static
+	for color in data["colorKeys"]:#load shader parameters
+		colorRect.material.set_shader_param("show_" + colorMap[int(color)], true)
 
-func _on_Crystal_newcolor(color : int) -> void:#connected through new_color signal
-	match color:#make the new color visible(inside the effect area)
-		RED:
-			colorRect.material.set_shader_param("show_red", true)
-		GREEN:
-			colorRect.material.set_shader_param("show_green", true)
-		BLUE:
-			colorRect.material.set_shader_param("show_blue", true)

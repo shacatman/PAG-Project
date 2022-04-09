@@ -1,4 +1,6 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://World/Barrier.gd" type="Script" id=1]
 
 [sub_resource type="Curve" id=1]
 bake_resolution = 81
@@ -11,9 +13,10 @@ curve = SubResource( 1 )
 [sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 16, 15 )
 
-[node name="StaticBody2D" type="StaticBody2D"]
+[node name="StaticBody2D" type="StaticBody2D" groups=["Persistent"]]
 collision_layer = 8
 collision_mask = 7
+script = ExtResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
 scale = Vector2( 1, 30.25 )

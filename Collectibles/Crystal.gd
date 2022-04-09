@@ -4,11 +4,25 @@ extends Area2D
 signal newcolor(color)
 #member variables
 enum COLORS {RED, GREEN, BLUE}#make sure this is the same as in ColorEffect!
-export(COLORS) var color = COLORS.RED#default value to be changed through editor or inheritance
-
+export(COLORS) var color = COLORS.RED#default value to be changed through editor
+var disabled = false
 
 
 #Player picks up the crystal-notify both effect nodes
 func _on_Crystal_body_entered(body : Player) -> void:
 	emit_signal("newcolor", color)
-	queue_free()
+	disableCrystal()
+
+
+func disableCrystal() -> void:#make crystal invisible and non-interactable
+	$CollisionShape2D.set_deferred("disabled", true)
+	visible = false
+	disabled = true
+	
+func getSaveData():
+	return {"disabled": disabled}
+
+	
+func loadData(data:Dictionary):
+	if data["disabled"] == true:
+		disableCrystal()

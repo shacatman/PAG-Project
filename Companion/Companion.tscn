@@ -8,7 +8,7 @@
 radius = 4.0
 height = 4.0
 
-[node name="KinematicBody2D" type="KinematicBody2D"]
+[node name="KinematicBody2D" type="KinematicBody2D" groups=["Persistent_Static"]]
 collision_layer = 4
 collision_mask = 10
 script = ExtResource( 2 )
@@ -41,8 +41,12 @@ margin_bottom = 20.0
 rect_scale = Vector2( 0.5, 0.5 )
 mouse_default_cursor_shape = 2
 
-[node name="Timer" type="Timer" parent="."]
+[node name="CoolDown" type="Timer" parent="."]
 wait_time = 20.0
+one_shot = true
+
+[node name="WanderTimer" type="Timer" parent="."]
+wait_time = 8.0
 one_shot = true
 
 [connection signal="newCommand" from="Commands" to="." method="_on_Commands_newCommand"]

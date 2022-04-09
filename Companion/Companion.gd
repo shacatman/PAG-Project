@@ -9,9 +9,8 @@ var pathFinding
 var path : Array = []
 var stay : bool = false
 var speed : = 40
-var wanderTimer = null#spacing between idle and wander
-
-onready var cooldownTimer : Timer = $Timer#cooldown to avoid wandering after commands
+onready var wanderTimer : Timer = $WanderTimer
+onready var cooldownTimer : Timer = $CoolDown#cooldown to avoid wandering after commands
 onready var player : Player = $"../Player"#reference to player scene
 onready var lineOfSight : RayCast2D = $LineOfSight
 onready var collisionShape : CollisionShape2D = $CollisionShape2D
@@ -39,13 +38,13 @@ func _physics_process(delta):
 		IDLE:
 			velocity = Vector2.ZERO
 			#option to change to wander state:
-			if !stay and wanderTimer == null and cooldownTimer.is_stopped():#can move and not waiting to move
-				wanderTimer = get_tree().create_timer(rand_range(4, 10))#wait until movement(random time duration)
+			if !stay and wanderTimer.is_stopped() and cooldownTimer.is_stopped():#can move and not waiting to move
+				wanderTimer.wait_time = int(rand_range(4, 10))#wait until movement(random time duration)
+				wanderTimer.start()
 				yield(wanderTimer, "timeout")#continue once timer finished
 				if state == IDLE and !stay and cooldownTimer.is_stopped():#now is time to move(and still can)
 					state = WANDER
 					target = null#new target will be picked in wander state
-				wanderTimer = null#"reset" timer for next time
 		
 		WANDER:	
 			var space = get_world_2d().get_direct_space_state()
@@ -59,7 +58,6 @@ func _physics_process(delta):
 			#once picked target-move towards it
 			followTarget(delta, target)
 			if global_position.distance_to(prevPos) < 0.2:#didn't move much-stop trying
-#				velocity = Vector2.ZERO
 				state = IDLE
 		
 		FOLLOWPLAYER, FOLLOWTARGET:
@@ -187,4 +185,11 @@ func isPlayerInSight() -> bool:#check that there is a direct line of sight to th
 	lineOfSight.look_at(player.global_position)
 	return lineOfSight.get_collider() is Player
 
+func getSaveData():#Persistent_Static
+	return {"CompanionPos": [global_position.x, global_position.y], "CompanionFrame" : sprite.frame}
+	
+func loadData(data : Dictionary):#Persistent_Static
+	global_position.x = float(data["CompanionPos"][0])
+	global_position.y = float(data["CompanionPos"][1])
+	sprite.set_frame(int(data["CompanionFrame"]))
 

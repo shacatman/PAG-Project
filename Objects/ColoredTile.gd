@@ -8,8 +8,8 @@ signal wrong_tile_color
 
 export (String, "None", "Red", "Green", "Blue", "Yellow") var correctColor
 var colormap = {"Red":Color.red, "Green":Color.green, "Blue":Color.blue, "Yellow":Color.yellow}
-var tileActive = false
-var activeColor = null
+var tileActive = false#true if player is on the tile
+var activeColor = null#has value if companion is on a ColorPickerTile
 onready var rect = $ColorRect
 
 # Called when the node enters the scene tree for the first time.
@@ -40,3 +40,13 @@ func changeTileColor():#change tile color to active color
 		elif rect.color == colormap[correctColor]:#tile color was correct before change
 			emit_signal("wrong_tile_color")
 		rect.color = colormap[activeColor]
+
+func getSaveData():
+	return {"color": rect.color}
+
+	
+func loadData(data:Dictionary):
+	rect.color = data["color"]
+	if rect.color == colormap[correctColor]:#current color is correct, notify the manager(since it reset)
+		emit_signal("correct_tile_color")
+

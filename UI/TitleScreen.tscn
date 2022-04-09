@@ -1,0 +1,51 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://UI/TitleButton.tscn" type="PackedScene" id=1]
+[ext_resource path="res://UI/TitleScreen.gd" type="Script" id=2]
+
+[node name="TitleScreen" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer"]
+margin_right = 320.0
+margin_bottom = 80.0
+rect_min_size = Vector2( 0, 80 )
+
+[node name="Label" type="Label" parent="VBoxContainer/CenterContainer"]
+margin_left = 120.0
+margin_top = 33.0
+margin_right = 199.0
+margin_bottom = 47.0
+text = "Crystal Clear"
+align = 1
+
+[node name="NewGame" parent="VBoxContainer" instance=ExtResource( 1 )]
+margin_top = 84.0
+margin_bottom = 104.0
+buttonText = "New Game"
+
+[node name="Continue" parent="VBoxContainer" instance=ExtResource( 1 )]
+margin_top = 108.0
+margin_bottom = 128.0
+buttonText = "Continue"
+
+[node name="Quit" parent="VBoxContainer" instance=ExtResource( 1 )]
+margin_top = 132.0
+margin_bottom = 152.0
+buttonText = "Quit"
+
+[connection signal="pressed" from="VBoxContainer/NewGame" to="." method="_on_NewGame_pressed"]
+[connection signal="pressed" from="VBoxContainer/Continue" to="." method="_on_Continue_pressed"]
+[connection signal="pressed" from="VBoxContainer/Quit" to="." method="_on_Quit_pressed"]

@@ -11,7 +11,6 @@ var state = IDLE
 var target = null
 var stay : bool = false
 var speed : = 60
-var wanderTimer = null
 var detectedArray : Array = []
 var sleepPos = null
 onready var player = preload("res://Player/Player.gd")#reference to player scene
@@ -22,6 +21,7 @@ onready var collisionShape : CollisionShape2D = $CollisionShape2D
 onready var sprite : = $Sprite
 onready var prevPos : Vector2 = global_position
 onready var trail : Line2D = $Line2D
+onready var wanderTimer : Timer = $WanderTimer
 
 enum {#state machine
 	IDLE,
@@ -51,13 +51,13 @@ func _physics_process(delta):
 				followTarget(delta, sleepPos)
 			else:#stay in place
 				velocity = Vector2.ZERO
-			if !stay and wanderTimer == null:#wander if possible
-				wanderTimer = get_tree().create_timer(rand_range(10, 15))
+			if !stay and wanderTimer.is_stopped():#wander if possible
+				wanderTimer.wait_time = int(rand_range(10, 15))
+				wanderTimer.start()
 				yield(wanderTimer,"timeout")#continue once timer finished
 				if state == IDLE and !stay:#can still wander
 					state = WANDER
 					target = null#reset target
-				wanderTimer = null
 		WANDER:
 			prevPos = global_position
 			var space = get_world_2d().get_direct_space_state()
@@ -233,4 +233,11 @@ func _on_detectionArea_body_entered(body):#either player or companion within det
 
 func _on_detectionArea_body_exited(body):#either player or companion left detection area
 	detectedArray.erase(body)
+
+func getSaveData():
+	return {"posx" : position.x, "posy" : position.y}
+
+func loadData(data : Dictionary):
+	position.x = data["posx"]
+	position.y = data["posy"]
 

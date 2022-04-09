@@ -24,9 +24,8 @@ func notifyColorChanged(color = null):#called by color pickers,notifies colored 
 
 func correctColor():#called by colored tiles whenever they changed into their correct color
 	correctColors += 1
-	if correctColors == colorables.size() and barrier != null:#solved the puzzle-remove barrier
-		barrier.queue_free()
-		barrier = null
+	if correctColors == colorables.size() and barrier.active:#solved the puzzle-disable barrier
+		barrier.disableBarrier()
 
 
 func wrongColor():#called by colored tiles whenever they changed from their correct color to a wrong one

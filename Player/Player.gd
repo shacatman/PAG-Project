@@ -42,3 +42,10 @@ func _physics_process(delta):
 		if pushable:
 			pushable.push(-get_slide_collision(0).normal)
 
+func getSaveData():#Persistent_Static
+	return {"PlayerPos": [global_position.x,global_position.y], "PlayerFrame" : sprite.frame}
+	
+func loadData(data:Dictionary):#Persistent_Static
+	global_position.x = float(data["PlayerPos"][0])
+	global_position.y = float(data["PlayerPos"][1])
+	sprite.set_frame(int(data["PlayerFrame"]))

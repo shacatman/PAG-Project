@@ -16,7 +16,7 @@ shader_param/size = 5.0
 [sub_resource type="CircleShape2D" id=1]
 radius = 21.0238
 
-[node name="Crystal" type="Area2D"]
+[node name="Crystal" type="Area2D" groups=["Persistent"]]
 material = SubResource( 2 )
 collision_layer = 0
 script = ExtResource( 1 )
