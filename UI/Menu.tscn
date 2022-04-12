@@ -6,6 +6,20 @@
 
 [node name="Menu" type="CanvasLayer"]
 
+[node name="Label" type="Label" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -14.0
+text = "Game Saved!"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Timer" type="Timer" parent="Label"]
+one_shot = true
+
 [node name="MenuButton" type="MenuButton" parent="."]
 pause_mode = 2
 anchor_left = 1.0
@@ -20,5 +34,14 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="ConfirmationDialog" type="ConfirmationDialog" parent="MenuButton"]
+margin_right = 200.0
+margin_bottom = 70.0
+mouse_filter = 2
+popup_exclusive = true
+window_title = "Are you sure you want to quit?"
+dialog_text = "By clicking OK all unsaved progress will be deleted!"
+dialog_autowrap = true
 
 [connection signal="toggled" from="MenuButton" to="MenuButton" method="_on_Menu_toggled"]
