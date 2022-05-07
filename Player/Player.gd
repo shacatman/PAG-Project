@@ -3,6 +3,7 @@ extends KinematicBody2D
 
 # Defines the Player class: movement and interaction with the enviroment
 
+signal speak
 #variables
 var velocity : = Vector2.ZERO
 onready var MAX_SPEED : = 100
@@ -10,6 +11,10 @@ onready var ACCELERATION : = 600
 onready var FRICTION : = 600
 onready var collisionShape:CollisionShape2D = $CollisionShape2D
 onready var sprite : = $Sprite
+
+func _ready():#stops player input during dialog sections
+	Dialog.connect("dialogStarted", self, "set_physics_process", [false])
+	Dialog.connect("dialogEnded", self, "set_physics_process", [true])
 
 # Called every physics frame. Deals with physics logic.
 func _physics_process(delta):
@@ -41,6 +46,10 @@ func _physics_process(delta):
 		var pushable : = get_slide_collision(0).collider as Pushable
 		if pushable:
 			pushable.push(-get_slide_collision(0).normal)
+	
+	if Input.is_key_pressed(KEY_E) and !Dialog.talking:#dialog checking
+		emit_signal("speak")#npcs connect to the signal
+		
 
 func getSaveData():#Persistent_Static
 	return {"PlayerPos": [global_position.x,global_position.y], "PlayerFrame" : sprite.frame}

@@ -5,8 +5,10 @@
 [sub_resource type="StyleBoxEmpty" id=1]
 
 [node name="Menu" type="CanvasLayer"]
+pause_mode = 2
 
 [node name="Label" type="Label" parent="."]
+visible = false
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0

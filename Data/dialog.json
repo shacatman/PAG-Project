@@ -1,0 +1,45 @@
+{
+	"default":{
+		"name":"???",
+		"text":["I CAN TALK?!\nWHO AM I???"],
+		"next":"end"
+	},
+	"welcome":{
+		"name":"Piff",
+		"text":["meow"],
+		"choices":[
+			{"text":"See you later kitty!","next":"bye"},
+			{"text":"Can you count to 3?","next":"count"}
+		],
+		"next":"bye"
+	},
+	"bye":{
+		"name":"Piff",
+		"text":["meoW?"],
+		"next":"end"
+	},
+	"count":{
+		"name":"Piff",
+		"text":["meow meow meow"],
+		"next":"welcome"
+	},
+	"fred_hi":{
+		"name":"Fred",
+		"text":["Hello there!\nI'm Fred!","Want to talk?"],
+		"choices":[
+			{"text":"Sure","next":"fred_talk"},
+			{"text":"Nah","next":"end"}
+		]
+	},
+	"fred_talk":{
+		"name":"Fred",
+		"text":["Well actually I have nothing to tell you..\nOops.."],
+		"action":"emit_signal dialogCheckpoint fred_talk_2",
+		"next":"end"
+	},
+	"fred_talk_2":{
+		"name":"Fred",
+		"text":["Oh, you're back!\nWell I still got nothing to tell. :/"],
+		"next":"end"
+	}
+}

@@ -23,6 +23,9 @@ func _ready():
 	quitConfirm.get_cancel().mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	quitConfirm.get_close_button().queue_free()
 	saveMessage.hide()
+	#disable during dialog sections
+	Dialog.connect("dialogStarted", self, "set_disabled", [true])
+	Dialog.connect("dialogEnded", self, "set_disabled", [false])
 
 
 func onIdPressed(id):
@@ -50,7 +53,9 @@ func togglePause() -> void:
 	else:#resume
 		get_tree().paused = false
 		paused = false
+#	print_debug("toggled pause")
 
 
 func _on_Menu_toggled(button_pressed):
+#	print_debug("menu pressed")
 	togglePause()

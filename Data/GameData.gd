@@ -4,6 +4,12 @@ extends Node
 
 var info = {}
 var currentLevel = null#updated by the LevelSwitcher singleton
+var savePath = "user://savegame.json"
+var dialog = {}
+var dialogPath = "res://Data/dialog.json"
+
+func _ready():
+	loadDialog()#load the dialog into local variable once when game starts
 
 
 func saveGame():#save the info to a file
@@ -16,7 +22,7 @@ func saveGame():#save the info to a file
 		info[node.name] = nodeData
 	
 	var file = File.new()
-	var error = file.open_encrypted_with_pass("user://savegame.json", File.WRITE, "PAGpag953%+q")
+	var error = file.open_encrypted_with_pass(savePath, File.WRITE, "PAGpag953%+q")
 	if error == OK:
 		var json = to_json(info)
 		file.store_line(json)
@@ -27,8 +33,8 @@ func saveGame():#save the info to a file
 	
 func loadGame():#load the game from the file
 	var file = File.new()
-	if file.file_exists("user://savegame.json"):
-		var error = file.open_encrypted_with_pass("user://savegame.json", File.READ, "PAGpag953%+q")
+	if file.file_exists(savePath):
+		var error = file.open_encrypted_with_pass(savePath, File.READ, "PAGpag953%+q")
 		if error == OK:
 			info = parse_json(file.get_as_text())
 			LevelSwitcher.switchLevel(int(info["level"]), null,  false)#don't save current state
@@ -36,7 +42,20 @@ func loadGame():#load the game from the file
 			for node in persistentNodes:
 				node.loadData(info[node.name])#all needed data from every persistent node
 		else:
-			print("Error opening the file")
+			print("Error opening the file" + savePath)
 		file.close()
 	else:
-		print("File doesn't exists")
+		print("File doesn't exists" + savePath)
+
+
+func loadDialog():#load the dialog from the file
+	var file = File.new()
+	if file.file_exists(dialogPath):
+		var error = file.open(dialogPath, File.READ)
+		if error == OK:
+			dialog = parse_json(file.get_as_text())
+		else:
+			print("Error opening the file" + dialogPath)
+		file.close()
+	else:
+		print("File doesn't exists" + dialogPath)

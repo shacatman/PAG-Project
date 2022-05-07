@@ -14,7 +14,9 @@ func _ready():
 	menu.add_item("Stay",1)
 	menu.add_item("Go Here",2)
 	menu.connect("id_pressed", self,"onIdPressed")#connect signal from command events
-
+	#disable during dialog sections
+	Dialog.connect("dialogStarted", self, "set_process_input", [false])
+	Dialog.connect("dialogEnded", self, "set_process_input", [true])
 
 func _input(event):
 	#right click opens the popup menu
