@@ -107,6 +107,9 @@ func _on_Commands_newCommand(id, params = null):#recieved new command via signal
 			target = params
 			stay = false
 			
+		3:#DIG
+			cooldownTimer.start()#do not wander while digging
+
 
 func followTarget(delta, target) -> void:
 	var avoiding : bool = false

@@ -1,4 +1,13 @@
 {
+	"id_template":{
+		"name":"",
+		"text":[""],
+		"choices":[
+			{"text":"","next":"","show_if":""}
+		],
+		"action":[],
+		"next":"end"
+	},
 	"default":{
 		"name":"???",
 		"text":["I CAN TALK?!\nWHO AM I???"],
@@ -34,12 +43,161 @@
 	"fred_talk":{
 		"name":"Fred",
 		"text":["Well actually I have nothing to tell you..\nOops.."],
-		"action":"emit_signal dialogCheckpoint fred_talk_2",
+		"action":["emit_signal dialogCheckpoint fred_pre_flower"],
 		"next":"end"
 	},
 	"fred_talk_2":{
 		"name":"Fred",
 		"text":["Oh, you're back!\nWell I still got nothing to tell. :/"],
 		"next":"end"
-	}
+	},
+	"fred_pre_flower":{
+		"name":"Fred",
+		"text":["Is there anything I can help you with?"],
+		"choices":[
+			{"text":"Nah","next":"end"},
+			{"text":"Actually..","next":"fred_flower_ask","show_if":"flowerIndex == 3"}
+		]
+	},
+	"fred_flower_ask":{
+		"text":["[You ask Fred if he's seen any flowers nearby.]"],
+		"next":"fred_flower_response"
+	},
+	"fred_flower_response":{
+		"name":"Fred",
+		"text":["I'm afraid not..\nI'll certainly let you know if I see one!","However...","I did notice these rock might be a little unstable."],
+		"next":"fred_wall_reach"
+	},
+	"fred_wall_reach":{
+		"text":["[Fred points towards the wall and taps it gently.]"],
+		"next":"fred_wall_break"
+	},
+	"fred_wall_break":{
+		"text":["[It falls apart.]","[A passage is revealed!]"],
+		"next":"fred_wall_response"
+	},
+	"fred_wall_response":{
+		"name":"Fred",
+		"text":["Oops?"],
+		"action":["emit_signal removeObject flower","emit_signal dialogCheckpoint fred_wall_response"],
+		"next":"end"
+	},
+	"farmer_welcome":{
+		"name":"Farmer Pete",
+		"text":["Well Well Well..\nWhat have we got here?","THAT'S COLOR!"],
+		"choices":[
+			{"text":"yes...","next":"farmer_color_truth"},
+			{"text":"no...","next":"farmer_color_lie"}
+		]
+	},
+	"farmer_color_truth":{
+		"name":"Farmer Pete",
+		"text":["Well I appreciate your honesty kid.\nTo be frank with ya, it's been a long time since I've last seen any color around.."],
+		"next":"farmer_talk"
+	},
+	"farmer_color_lie":{
+		"name":"Farmer Pete",
+		"text":["Ya ain't fooling me kid.\nI've probably seen colors before you were even born, ha!"],
+		"next":"farmer_talk"
+	},
+	"farmer_talk":{
+		"name":"Farmer Pete",
+		"text":["Anyways, what's your name kid?","You know what?\nIt doesn't matter. I'll forget it within 10 minutes from now so why bother, heh!"],
+		"next":"farmer_request"
+	},
+	"farmer_request":{
+		"text":["[You ask the farmer for their permission to go in the backyard]"],
+		"next":"farmer_quest"
+	},
+	"farmer_quest":{
+		"name":"Farmer Pete",
+		"text":["Bring me 5 truffles and I'll let ya snoop around.\nDeal?"],
+		"choices":[
+			{"text":"fine","next":"farmer_quest_accept"},
+			{"text":"I'll think about it","next":"end"}
+		],
+		"action":["emit_signal dialogCheckpoint farmer_quest"]
+	},
+	"farmer_quest_accept":{
+		"name":"Farmer Pete",
+		"text":["That's wonderful news!\nFinally I'll get rich-","I-I mean FOOD for my 12 orphan children to survive the cold winter..","What are you still doing here?\nSkedaddle!"],
+		"action":["emit_signal dialogCheckpoint farmer_quest_pending"],
+		"next":"end"
+	},
+	"farmer_quest_pending":{
+		"name":"Farmer Pete",
+		"text":["Have you got my truffles, kid?"],
+		"choices":[
+			{"text":"yes","next":"farmer_quest_complete","show_if":"truffles == 5"},
+			{"text":"not yet","next":"end"}
+		]
+	},
+	"dig_success":{
+		"text":["You found a truffle!"],
+		"action":["set truffles +"],
+		"next":"end"
+	},
+	"dig_fail1":{
+		"text":["You found a worm..."],
+		"next":"end"
+	},
+	"dig_fail2":{
+		"text":["You found dirt..."],
+		"next":"end"
+	},
+	"dig_finished":{
+		"text":["Seems like there are no truffles left here."],
+		"next":"end"
+	},
+	"farmer_quest_complete":{
+		"name":"Farmer Pete",
+		"text":["Oh my! That sure puts a smile on my ol' face teehee.","I guess you can borrow my key, just don't break anything!"],
+		"next":"farmer_key_got"
+	},
+	"farmer_key_got":{
+		"text":["[You got the farmer's key!]"],
+		"action":["set hasKey true"],
+		"next":"end"
+	},
+	"farmer_gate_locked":{
+		"text":["[The gate is locked.]"],
+		"choices":[
+			{"text":"Unlock the gate","next":"farmer_gate_open","show_if":"hasKey == true"}
+		],
+		"next":"end"
+	},
+	"farmer_gate_open":{
+		"text":["You unlocked the gate!"],
+		"action":["emit_signal removeObject 5","emit_signal stopDialog"],
+		"next":"end"
+	},
+	"flower_hunt_begin":{
+		"name":"Jade",
+		"text":["You must gather them all if you wish to correct this world..."],
+		"action":["set flowerIndex +","emit_signal dialogCheckpoint flower_hunt_pending"],
+		"next":"end"
+	},
+	"flower_hunt_pending":{
+		"name":"Jade",
+		"text":["I shall prepare in the meantime..."],
+		"choices":[
+			{"text":"I'll be right back!","next":"end"},
+			{"text":"I have the flowers!","next":"Jade_goodbye","show_if":"flowerIndex == 4"}
+		]
+	},
+	"flower_collected":{
+		"text":["Flower collected!"],
+		"action":["set flowerIndex +"],
+		"next":"end"
+	},
+	"Jade_goodbye":{
+		"name":"Jade",
+		"text":["Thank you for saving this world..","I'm sure we will meet again...\nsomeday..."],
+		"next":"Jade_gone"
+	},
+	"Jade_gone":{
+		"text":["[She's gone..]"],
+		"action":["emit_signal endGame","emit_signal removeObject Jade"],
+		"next":"end"
+	},
 }

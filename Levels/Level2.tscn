@@ -96,7 +96,7 @@ nextLevelIndex = 3
 [node name="NpcCatcher" parent="." instance=ExtResource( 3 )]
 
 [node name="Barrier" parent="NpcCatcher" instance=ExtResource( 22 )]
-position = Vector2( -25.6, -19.1667 )
+position = Vector2( -25.8, -19 )
 scale = Vector2( 0.2, 0.166667 )
 
 [node name="YSort" type="YSort" parent="."]

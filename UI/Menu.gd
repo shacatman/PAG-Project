@@ -21,7 +21,9 @@ func _ready():
 	quitConfirm.get_ok().focus_mode = Control.FOCUS_NONE
 	quitConfirm.get_ok().mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	quitConfirm.get_cancel().mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	quitConfirm.get_close_button().queue_free()
+	#'remove' closing button
+	quitConfirm.get_close_button().disabled = true
+	quitConfirm.get_close_button().hide()
 	saveMessage.hide()
 	#disable during dialog sections
 	Dialog.connect("dialogStarted", self, "set_disabled", [true])
@@ -33,7 +35,7 @@ func onIdPressed(id):
 		0:#SAVE
 			GameData.saveGame()
 			saveMessage.show()
-			var timer = saveMessage.get_node("Timer")#get_tree().create_timer(1)
+			var timer = saveMessage.get_node("Timer")
 			timer.start()
 			yield(timer,"timeout")
 			saveMessage.hide()

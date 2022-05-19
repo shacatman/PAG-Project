@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://UI/TitleButton.tscn" type="PackedScene" id=1]
 [ext_resource path="res://UI/TitleScreen.gd" type="Script" id=2]
+[ext_resource path="res://UI/ControlsDescription.gd" type="Script" id=3]
 
 [node name="TitleScreen" type="Control"]
 anchor_right = 1.0
@@ -41,11 +42,58 @@ margin_top = 108.0
 margin_bottom = 128.0
 buttonText = "Continue"
 
-[node name="Quit" parent="VBoxContainer" instance=ExtResource( 1 )]
+[node name="Controls" parent="VBoxContainer" instance=ExtResource( 1 )]
 margin_top = 132.0
 margin_bottom = 152.0
+buttonText = "Controls"
+
+[node name="Quit" parent="VBoxContainer" instance=ExtResource( 1 )]
+margin_top = 156.0
+margin_bottom = 176.0
 buttonText = "Quit"
+
+[node name="WindowDialog" type="WindowDialog" parent="."]
+margin_right = 48.0
+margin_bottom = 40.0
+popup_exclusive = true
+window_title = "Controls"
+
+[node name="PopupDialog" type="PopupDialog" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="PopupPanel" type="PopupPanel" parent="."]
+margin_right = 8.0
+margin_bottom = 8.0
+
+[node name="ControlsDescription" type="AcceptDialog" parent="."]
+visible = true
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -160.0
+margin_top = -80.0
+margin_right = 160.0
+margin_bottom = 80.0
+grow_horizontal = 2
+rect_min_size = Vector2( 320, 160 )
+rect_scale = Vector2( 0.8, 0.8 )
+rect_pivot_offset = Vector2( 160, 90 )
+popup_exclusive = true
+window_title = "Controls"
+dialog_text = "1. Move the player using the arrow keys.
+2. Right-click to open Commands interface.
+3. Dialog interactions are triggered by the 'E' key. (available when a bubble icon appears)
+4. Use space bar to continue dialog.
+(unless a choice is required, then press a button)"
+dialog_autowrap = true
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [connection signal="pressed" from="VBoxContainer/NewGame" to="." method="_on_NewGame_pressed"]
 [connection signal="pressed" from="VBoxContainer/Continue" to="." method="_on_Continue_pressed"]
+[connection signal="pressed" from="VBoxContainer/Controls" to="." method="_on_Controls_pressed"]
 [connection signal="pressed" from="VBoxContainer/Quit" to="." method="_on_Quit_pressed"]

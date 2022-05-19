@@ -20,7 +20,6 @@ radius = 21.0238
 material = SubResource( 2 )
 collision_layer = 0
 script = ExtResource( 1 )
-color = 1
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 2 )

@@ -51,14 +51,6 @@ func _input(event):
 
 
 func continueDialog():
-#	if choices and currentDialog.getTextSectionsLeft()<=1:
-#		show()#_choices
-#	elif !choices and currentDialog.getTextSectionsLeft()<1:
-#		setDialogUI(currentDialog.nextID)
-#	else:
-#		textBox.text = currentDialog.getNextText()
-	
-	
 	if currentDialog.getTextSectionsLeft() > 1:#got more text to show after
 		textBox.text = currentDialog.getNextText()#set text in UI
 	elif currentDialog.getTextSectionsLeft() == 1:#show choices with final text(if any)
