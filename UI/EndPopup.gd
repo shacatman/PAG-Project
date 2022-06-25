@@ -17,6 +17,10 @@ func _ready():
 	get_close_button().disabled = true
 	get_close_button().hide()
 	#wait until game finished
-	yield(Dialog.currentDialog, "endGame")
-	yield(Dialog,"dialogEnded")
-	popup_centered()#show once
+	Dialog.currentDialog.connect("endGame",self,"openPopup")
+	
+	
+func openPopup():
+	if is_instance_valid(Dialog.currentDialog):#make sure dialog exists
+		yield(Dialog,"dialogEnded")
+		popup_centered()#show once

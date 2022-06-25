@@ -11,7 +11,8 @@ func _ready():
 	popup.popup_exclusive = true#don't close the popup from inputs outside the button
 	popup.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	popup.add_item("Save",0)
-	popup.add_item("Main",1)
+	popup.add_item("Music",1)#turn music on/off
+	popup.add_item("Main",2)
 	popup.connect("id_pressed", self,"onIdPressed")
 	quitConfirm.connect("confirmed", LevelSwitcher, "titleScreen")
 	#'style' improvments
@@ -39,8 +40,14 @@ func onIdPressed(id):
 			timer.start()
 			yield(timer,"timeout")
 			saveMessage.hide()
+		
+		1:#Mute/Unmute music
+			if BackgroundMusic.playing():
+				BackgroundMusic.stopMusic()
+			else:
+				BackgroundMusic.playMusic()
 
-		1:#back to main screen(does not save game)
+		2:#back to main screen(does not save game)
 			#confirmation dialog
 			togglePause()
 			quitConfirm.popup_centered()
@@ -55,9 +62,8 @@ func togglePause() -> void:
 	else:#resume
 		get_tree().paused = false
 		paused = false
-#	print_debug("toggled pause")
+		focus_mode = Control.FOCUS_NONE
 
 
-func _on_Menu_toggled(button_pressed):
-#	print_debug("menu pressed")
+func _on_Menu_toggled(_button_pressed):
 	togglePause()

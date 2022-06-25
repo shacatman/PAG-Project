@@ -4,7 +4,7 @@ extends Node2D
 
 class Astar:#internal class that implements trivial cost computation for Astar algorithm
 	extends AStar2D
-	func _compute_cost(from_id:int, to_id:int) -> float:
+	func _compute_cost(_from_id:int, _to_id:int) -> float:
 		return 1.0
 
 var astar : = Astar.new()
@@ -12,7 +12,7 @@ var tileMap : TileMap
 var half_cell_size : Vector2
 var usedRect : Rect2 #path area
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	updateNavigationMap()
 
 

@@ -12,14 +12,14 @@ func _ready():
 	connect("unpressed",get_parent(),"plateUnPressed")
 
 
-func _on_Plate_body_entered(body):
+func _on_Plate_body_entered(_body):
 	bodyCount+=1
 	if bodyCount == 1:#first time being pressed
 		#change to pressed sprite?(later)
 		emit_signal("pressed")
 
 
-func _on_Plate_body_exited(body):
+func _on_Plate_body_exited(_body):
 	bodyCount-=1
 	if bodyCount == 0:#not pressed anymore
 		#change to default sprite?(later)

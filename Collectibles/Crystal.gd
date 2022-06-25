@@ -9,12 +9,13 @@ var disabled = false
 
 
 #Player picks up the crystal-notify both effect nodes
-func _on_Crystal_body_entered(body : Player) -> void:
+func _on_Crystal_body_entered(_body : Player) -> void:
 	emit_signal("newcolor", color)
 	disableCrystal()
 
 
 func disableCrystal() -> void:#make crystal invisible and non-interactable
+	$AudioStreamPlayer.play()#pickup sound
 	$CollisionShape2D.set_deferred("disabled", true)
 	visible = false
 	disabled = true
@@ -25,4 +26,5 @@ func getSaveData():
 	
 func loadData(data:Dictionary):
 	if data["disabled"] == true:
+		$AudioStreamPlayer.stream = null#do not play pickup sound again
 		disableCrystal()

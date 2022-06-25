@@ -40,6 +40,8 @@ func _ready():
 func _physics_process(delta):
 	for body in detectedArray:#check potential threats
 		if !stay and isInSight(body):#threat exists
+			if not $ScaredSound.playing and state==IDLE and randf()>0.6:#play sound with 40% chance
+				$ScaredSound.play()
 			state = FLEE
 			break#no need to look for more threats
 		elif state == FLEE:#no threat anymore-calm down (unless another threat is found in next iterations)
@@ -94,7 +96,7 @@ func _physics_process(delta):
 
 
 
-func followTarget(delta, target) -> void:
+func followTarget(_delta, target) -> void:
 	var avoiding : bool = false
 	var desired_velocity : Vector2 = global_position.direction_to(target) * speed 
 	
@@ -155,7 +157,7 @@ func followTarget(delta, target) -> void:
 	move_and_slide(velocity)
 
 
-func flee(delta) -> void:
+func flee(_delta) -> void:
 	var avoiding : bool = false
 	var desired_velocity : Vector2 = Vector2.ZERO
 	if detectedArray.empty():#slow down after escaping

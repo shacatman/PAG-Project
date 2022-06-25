@@ -44,7 +44,7 @@ text = "_Name_"
 
 [node name="TextBox" type="Label" parent="DialogUI/VBoxContainer"]
 margin_top = 18.0
-margin_right = 305.0
+margin_right = 310.0
 margin_bottom = 86.0
 size_flags_vertical = 7
 text = "<Text>"

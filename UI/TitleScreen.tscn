@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://UI/TitleButton.tscn" type="PackedScene" id=1]
 [ext_resource path="res://UI/TitleScreen.gd" type="Script" id=2]
 [ext_resource path="res://UI/ControlsDescription.gd" type="Script" id=3]
+[ext_resource path="res://World/Grass.png" type="Texture" id=4]
 
 [node name="TitleScreen" type="Control"]
 anchor_right = 1.0
@@ -11,6 +12,14 @@ script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Grass" type="Sprite" parent="."]
+self_modulate = Color( 0.74902, 0.74902, 0.74902, 1 )
+scale = Vector2( 15, 8 )
+texture = ExtResource( 4 )
+centered = false
+flip_h = true
+flip_v = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchor_right = 1.0
@@ -67,7 +76,6 @@ margin_right = 8.0
 margin_bottom = 8.0
 
 [node name="ControlsDescription" type="AcceptDialog" parent="."]
-visible = true
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5

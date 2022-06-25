@@ -20,9 +20,9 @@ func _ready():
 			icon = $ActionIcon
 	if sprite:
 		$Sprite.texture = sprite
-	if !is_inside_tree():#avoid errors in editor(tool script)
-		return
-	Dialog.currentDialog.connect("removeObject", self, "remove")
+	if Dialog.is_inside_tree():#avoid errors in editor(tool script)
+		Dialog.currentDialog.connect("removeObject", self, "remove")
+
 
 func setSprite(newSprite):
 	sprite = newSprite
@@ -38,7 +38,7 @@ func _on_SpeakingNPC_body_entered(body):
 		player.connect("speak", self, "talk")
 
 #player is gone
-func _on_SpeakingNPC_body_exited(body):
+func _on_SpeakingNPC_body_exited(_body):
 	if player.is_connected("speak", self, "talk"):
 		player.disconnect("speak", self, "talk")
 	icon.hide()

@@ -6,7 +6,7 @@ extends Node2D
 var active = true
 
 #crystal collected-remove the crystal effect
-func _on_Crystal_newcolor(color : int) -> void:
+func _on_Crystal_newcolor(_color : int) -> void:
 	$ShaderRect.material.set_shader_param("active",false)
 	active = false
 

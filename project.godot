@@ -35,6 +35,7 @@ config/icon="res://icon.png"
 LevelSwitcher="*res://World/LevelSwitcher.gd"
 GameData="*res://Data/GameData.gd"
 Dialog="*res://UI/Dialog.tscn"
+BackgroundMusic="*res://Audio/BackgroundMusic.tscn"
 
 [display]
 

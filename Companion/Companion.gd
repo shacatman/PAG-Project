@@ -28,7 +28,10 @@ enum {#state machine
 ## Called when the node enters the scene tree for the first time.
 func _ready():
 	randomize()
-
+	state = FOLLOWPLAYER#default state
+	$ConfirmSound.stream = null
+	$Commands.onIdPressed(0)#disable follow command initially
+	$ConfirmSound.stream = preload("res://Audio/Recording.wav")
 
 # Called every physics frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
@@ -62,6 +65,8 @@ func _physics_process(delta):
 		
 		FOLLOWPLAYER, FOLLOWTARGET:
 			if state == FOLLOWPLAYER and isPlayerInSight():#set relevant target if following player
+				if not target and not $ConfirmSound.playing and global_position.distance_to(player.global_position) > 30:#sees player after losing line of sight
+					$ConfirmSound.play()
 				target = player.global_position
 			
 			#do not follow targets if within close proximity
@@ -95,6 +100,7 @@ func _on_Commands_newCommand(id, params = null):#recieved new command via signal
 			if state != FOLLOWPLAYER:
 				state = FOLLOWPLAYER
 			stay = false
+			target = null#no target initially(reset target)
 			
 		1:#STAY
 			state = IDLE
@@ -106,12 +112,14 @@ func _on_Commands_newCommand(id, params = null):#recieved new command via signal
 			#params is the target position
 			target = params
 			stay = false
+			if not $ConfirmSound.playing and pathFinding.getNewPath(global_position, target).size()>0:
+				$ConfirmSound.play()#command received indication
 			
 		3:#DIG
 			cooldownTimer.start()#do not wander while digging
 
 
-func followTarget(delta, target) -> void:
+func followTarget(_delta, target) -> void:
 	var avoiding : bool = false
 	path = pathFinding.getNewPath(global_position, target)
 	if path.size() >= 1:
@@ -180,7 +188,9 @@ func followTarget(delta, target) -> void:
 		move_and_slide(velocity)
 		
 	else:#no path to the target is available
-		print("CAN'T FIND PATH TO TARGET")#for debug
+		if state != WANDER:
+			if not $ConfusedSound.playing:
+				$ConfusedSound.play()
 		state = IDLE
 
 

@@ -14,6 +14,7 @@ func _ready():
 func disableBarrier(id = null):#called once puzzles are solved,optional id to differentiate between multiple barriers
 	if !id or id == self.id:
 		if active:
+			$AudioStreamPlayer2D.play()#rocks sound
 			collision.set_deferred("disabled", true)
 			visible = false
 			active = false
@@ -24,4 +25,5 @@ func getSaveData():
 	
 func loadData(data:Dictionary):
 	if data["active"] == false:
+		$AudioStreamPlayer2D.stream=null#do not play audio again
 		disableBarrier()

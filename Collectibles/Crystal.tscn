@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Collectibles/Crystal.gd" type="Script" id=1]
 [ext_resource path="res://Collectibles/crystal_green.png" type="Texture" id=2]
 [ext_resource path="res://Shaders/CrystalEffect.gdshader" type="Shader" id=3]
+[ext_resource path="res://Audio/Pickup.wav" type="AudioStream" id=4]
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = ExtResource( 3 )
@@ -26,5 +27,8 @@ texture = ExtResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
 
 [connection signal="body_entered" from="." to="." method="_on_Crystal_body_entered"]

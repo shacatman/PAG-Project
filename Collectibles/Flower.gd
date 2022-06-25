@@ -24,6 +24,7 @@ func _on_Flower_body_entered(body) -> void:
 			#pick flower if possible-disables it+notify dialog
 			if pickable:
 				setFlowerActive(false)
+				$AudioStreamPlayer.play()#pickup sound
 				Dialog.startDialog("flower_collected")
 		4:#companion
 			#connect to function changing flower state(allows comapnion to dig)
@@ -53,6 +54,7 @@ func dig(digKey, _params = null):#extra params are ignored
 		for body in get_overlapping_bodies():#in case player is already inside area
 			if body.collision_layer == 1:
 				setFlowerActive(false)
+				$AudioStreamPlayer.play()#pickup sound
 				Dialog.startDialog("flower_collected")#inform player of progress
 
 

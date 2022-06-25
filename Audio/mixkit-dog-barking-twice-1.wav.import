@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/mixkit-dog-barking-twice-1.wav-6b5385be0a308de5f65784dd005b461a.sample"
+
+[deps]
+
+source_file="res://Audio/mixkit-dog-barking-twice-1.wav"
+dest_files=[ "res://.import/mixkit-dog-barking-twice-1.wav-6b5385be0a308de5f65784dd005b461a.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=false
+edit/loop=false
+compress/mode=0

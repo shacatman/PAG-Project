@@ -1,54 +1,25 @@
 {
-	"id_template":{
-		"name":"",
-		"text":[""],
-		"choices":[
-			{"text":"","next":"","show_if":""}
-		],
-		"action":[],
-		"next":"end"
-	},
 	"default":{
 		"name":"???",
 		"text":["I CAN TALK?!\nWHO AM I???"],
 		"next":"end"
 	},
-	"welcome":{
-		"name":"Piff",
-		"text":["meow"],
-		"choices":[
-			{"text":"See you later kitty!","next":"bye"},
-			{"text":"Can you count to 3?","next":"count"}
-		],
-		"next":"bye"
-	},
-	"bye":{
-		"name":"Piff",
-		"text":["meoW?"],
-		"next":"end"
-	},
-	"count":{
-		"name":"Piff",
-		"text":["meow meow meow"],
-		"next":"welcome"
-	},
 	"fred_hi":{
 		"name":"Fred",
-		"text":["Hello there!\nI'm Fred!","Want to talk?"],
+		"text":["Hello there!\nI'm Fred!"],
 		"choices":[
-			{"text":"Sure","next":"fred_talk"},
-			{"text":"Nah","next":"end"}
+			{"text":"Hello","next":"fred_talk"},
+			{"text":"See you later","next":"end"}
 		]
 	},
 	"fred_talk":{
 		"name":"Fred",
-		"text":["Well actually I have nothing to tell you..\nOops.."],
-		"action":["emit_signal dialogCheckpoint fred_pre_flower"],
-		"next":"end"
+		"text":["Woah, this doggie seems to really like you!\nI hear they're quite an obedient species!","Well, not the little ones.."],
+		"next":"fred_talk_2"
 	},
 	"fred_talk_2":{
-		"name":"Fred",
-		"text":["Oh, you're back!\nWell I still got nothing to tell. :/"],
+		"text":["[Right click to open the commands interface]"],
+		"action":["emit_signal dialogCheckpoint fred_pre_flower"],
 		"next":"end"
 	},
 	"fred_pre_flower":{
@@ -74,12 +45,13 @@
 	},
 	"fred_wall_break":{
 		"text":["[It falls apart.]","[A passage is revealed!]"],
+		"action":["emit_signal removeObject flower"],
 		"next":"fred_wall_response"
 	},
 	"fred_wall_response":{
 		"name":"Fred",
 		"text":["Oops?"],
-		"action":["emit_signal removeObject flower","emit_signal dialogCheckpoint fred_wall_response"],
+		"action":["emit_signal dialogCheckpoint fred_wall_response"],
 		"next":"end"
 	},
 	"farmer_welcome":{
@@ -156,7 +128,12 @@
 	},
 	"farmer_key_got":{
 		"text":["[You got the farmer's key!]"],
-		"action":["set hasKey true"],
+		"action":["set hasKey true","emit_signal dialogCheckpoint farmer_end"],
+		"next":"end"
+	},
+	"farmer_end":{
+		"name":"Farmer Pete",
+		"text":["Go on, kid.\nGo do your business."],
 		"next":"end"
 	},
 	"farmer_gate_locked":{
@@ -171,11 +148,30 @@
 		"action":["emit_signal removeObject 5","emit_signal stopDialog"],
 		"next":"end"
 	},
+	"Jade_intro":{
+		"name":"Jade",
+		"text":["I knew you'd come brave traveler..","It is time to reunite the fragments.","However...","Something is missing.."],
+		"next":"Jade_explain"
+	},
+	"Jade_explain":{
+		"name":"Jade",
+		"text":["I can sense it...","The fragments are weak..\nA part of their essence is gone.."],
+		"choices":[
+			{"text":"Essence?","next":"Jade_essence"},
+			{"text":"What should I do?","next":"flower_hunt_begin"}
+		]
+	},
+	"Jade_essence":{
+		"name":"Jade",
+		"text":["Indeed, the crystal is only a vessel, destined to contain the energy of creation.","It is what kept this world in balance, for centuries..."],
+		"next":"flower_hunt_begin"
+	},
+	
 	"flower_hunt_begin":{
 		"name":"Jade",
-		"text":["You must gather them all if you wish to correct this world..."],
+		"text":["You need to find all the missing pieces if you wish to correct this world...","They should be around somewhere.."],
 		"action":["set flowerIndex +","emit_signal dialogCheckpoint flower_hunt_pending"],
-		"next":"end"
+		"next":"flower_hunt_pending"
 	},
 	"flower_hunt_pending":{
 		"name":"Jade",
@@ -192,7 +188,7 @@
 	},
 	"Jade_goodbye":{
 		"name":"Jade",
-		"text":["Thank you for saving this world..","I'm sure we will meet again...\nsomeday..."],
+		"text":["I am proud of you, traveler.\nYou truly have come far..","Thank you for saving this world..","I'm sure we will meet again...\nSomeday..."],
 		"next":"Jade_gone"
 	},
 	"Jade_gone":{
@@ -200,4 +196,41 @@
 		"action":["emit_signal endGame","emit_signal removeObject Jade"],
 		"next":"end"
 	},
+	"farm_boy":{
+		"name":"Teddy",
+		"text":["My boss will be so mad if he hears I lost his herd!"],
+		"next":"farm_boy_task"
+	},
+	"farm_boy_task":{
+		"text":["[Lead the little ones to the locations indicated by the signs.\nMake sure their types are Matching!]"],
+		"action":["emit_signal dialogCheckpoint farm_boy_task"],
+		"next":"end"
+	},
+	"cat":{
+		"name":"Felix",
+		"text":["Little ones used to roam this place, hehe.\nBut now, only the signs marking their spots are left.","I heard those locations were meant to remind the owner of some code.","I bet it's nonsense, haha!"],
+		"next":"cat_task"
+	},
+	"cat_task":{
+		"text":["[Use your companion to select a color for the tiles.]"],
+		"next":"end"
+	},
+	"mamapanion":{
+		"name":"Mama Jess",
+		"text":["Please! Bring my babies to safety! I will be forever greatful!"],
+		"choices":[
+			{"text":"You speak?!","next":"mamapanion_speak"},
+			{"text":"OK just calm down!","next":"mamapanion_task"}
+		]
+	},
+	"mamapanion_speak":{
+		"name":"Mama Jess",
+		"text":["Only a few of us do.","It is more rare this days.."],
+		"next":"mamapanion_task"
+	},
+	"mamapanion_task":{
+		"text":["[Lead the little ones to locations marked with signs.]"],
+		"action":["emit_signal dialogCheckpoint mamapanion_task"],
+		"next":"end"
+	}
 }

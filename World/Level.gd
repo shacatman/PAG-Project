@@ -34,7 +34,7 @@ func setup(comingFrom = null) -> void:#called whenever a (new) level enters the 
 		levelchanger.connect("body_entered", self, "_on_LevelChangeTile_body_entered", [levelchanger.nextLevelIndex, levelchanger.comingFrom])
 
 
-func _on_LevelChangeTile_body_entered(body, nextLevel, comingFrom:String) -> void:
+func _on_LevelChangeTile_body_entered(_body, nextLevel, comingFrom:String) -> void:
 	emit_signal("levelchanged", nextLevel, comingFrom)#pass the next level info to the level switcher
 
 func saveLevelData():

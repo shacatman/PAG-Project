@@ -33,6 +33,7 @@ func switchLevel(nextLevelIndex:int, comingFrom = null, saveState = true) -> voi
 func titleScreen() -> void:#goes to title screen, does not save
 	var title = load("res://UI/TitleScreen.tscn").instance()
 	root.add_child(title)
+	BackgroundMusic.stopMusic()
 	currentLevel.queue_free()
 	yield(currentLevel,"tree_exited")
 	currentLevel = title

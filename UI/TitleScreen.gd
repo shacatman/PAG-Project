@@ -15,10 +15,12 @@ func _on_NewGame_pressed():
 	if File.new().file_exists("user://savegame.json"):#ignore old save
 		GameData.info = {}#overrides savefile data
 	LevelSwitcher.switchLevel(1, null, false)#no data to save on title screen
+	BackgroundMusic.playMusic()
 
 
 func _on_Continue_pressed():
 	GameData.loadGame()
+	BackgroundMusic.playMusic()
 
 
 func _on_Quit_pressed():
